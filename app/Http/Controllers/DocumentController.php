@@ -10,7 +10,8 @@ class DocumentController extends Controller
 {
     public function index()
     {
-        return Document::all();
+        $documents = Document::all();
+        return response()->json(['data' => $documents]);
     }
 
     public function store(Request $request)
