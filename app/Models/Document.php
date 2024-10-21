@@ -12,10 +12,11 @@ class Document extends Model
 
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $fillable = ['id', 'name', 'description', 'questions'];
+
+    protected $fillable = ['id', 'name', 'description', 'questions', 'screenshot_path', 'user_id'];
 
     protected $casts = [
-        'questions' => 'array', // Cast questions to array automatically
+        'questions' => 'array', // Cast questions to array automatiquement
     ];
 
     protected static function boot()
@@ -24,5 +25,10 @@ class Document extends Model
         static::creating(function ($model) {
             $model->id = (string) Str::uuid();
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

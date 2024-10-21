@@ -12,7 +12,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->default('untitled-form');
             $table->string('description')->default('Add Description');
-            $table->json('questions')->nullable(); // Store questions as JSON
+            $table->json('questions')->nullable();
+            $table->string('screenshot_path')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');  // Lien avec la table users
             $table->timestamps();
         });
     }
