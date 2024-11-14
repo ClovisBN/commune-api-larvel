@@ -25,13 +25,11 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    
 
     public function role()
     {
@@ -50,11 +48,22 @@ class User extends Authenticatable implements JWTSubject
     
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Survey::class);
     }
 
     public function articles()
     {
         return $this->hasMany(Article::class);
     }
+
+    public function grievances()
+    {
+        return $this->hasMany(Grievance::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
 }

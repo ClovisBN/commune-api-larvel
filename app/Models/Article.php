@@ -1,6 +1,4 @@
 <?php
-// app/Models/Article.php
-
 
 namespace App\Models;
 
@@ -12,13 +10,15 @@ class Article extends Model
 {
     use HasFactory;
 
+    protected $table = 'articles';
+
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['id', 'title', 'description', 'components', 'user_id'];
+    protected $fillable = ['id', 'title_article', 'description_article', 'content_article', 'user_id', 'status_id'];
 
     protected $casts = [
-        'components' => 'array', // Cast components to array automatiquement
+        'content_article' => 'array',
     ];
 
     protected static function boot()
@@ -33,4 +33,9 @@ class Article extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(ArticleStatus::class, 'status_id');
+    }    
 }

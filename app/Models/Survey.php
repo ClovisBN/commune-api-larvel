@@ -6,17 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Document extends Model
+class Survey extends Model
 {
     use HasFactory;
+
+    protected $table = 'surveys';
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['id', 'name', 'description', 'questions', 'screenshot_path', 'user_id'];
+    protected $fillable = ['id', 'title_survey', 'description_survey', 'content_survey', 'user_id', 'status_id'];
 
     protected $casts = [
-        'questions' => 'array', // Cast questions to array automatiquement
+        'content_survey' => 'array',
     ];
 
     protected static function boot()
@@ -31,4 +33,9 @@ class Document extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(SurveyStatus::class, 'status_id');
+    }    
 }

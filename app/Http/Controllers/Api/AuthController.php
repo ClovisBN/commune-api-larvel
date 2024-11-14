@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
         try {
-            // Validation des données de l'inscription
             $data = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => [
@@ -25,21 +23,18 @@ class AuthController extends Controller
                     'email',
                     'max:255',
                     'unique:users',
-                    'regex:/^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/', // Regex pour l'email
                 ],
                 'password' => [
                     'required',
                     'string',
                     'min:8',
-                    'confirmed',  // Vérifie que password_confirmation correspond
-                    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/',  // Regex pour le mot de passe sécurisé
+                    'confirmed',  
+                    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/',  // Regex
                 ],
             ]);
     
-            // Récupérer le rôle par défaut (par exemple "user")
             $role = Role::where('role_name', 'user')->first();
     
-            // Création de l'utilisateur
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -47,8 +42,7 @@ class AuthController extends Controller
                 'role_id' => $role->id,
             ]);
     
-            // Génération du token API
-            $token = $user->createToken('access_token', ['*'], Carbon::now()->addHours(24))->plainTextToken;
+            $token = $user->createToken('access_token', Carbon::now()->addHours(24))->plainTextToken;
     
             return response()->json([
                 'access_token' => $token,
@@ -68,7 +62,6 @@ class AuthController extends Controller
     
     public function login(Request $request)
     {
-        // Validation et Authentification
         $data = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -78,7 +71,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
         
-        // Génération du token API comme sécurité supplémentaire
         $user = Auth::user();
         $token = $user->createToken('access_token')->plainTextToken;
     
